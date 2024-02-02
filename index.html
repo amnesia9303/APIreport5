@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ワイン検索サイト</title>
+</head>
+<body>
+    <header>
+        <h1>ワイン検索サイト</h1>
+        <p>表示されたワインの名前をクリックすると通販サイトに遷移します。</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">検索</a></li>
+            <li><a href="document.html">ドキュメント</a></li>
+        </ul>
+    </nav>
+
+    <!-- ワインの種類を選択するドロップダウン -->
+    <select id="wine_category">
+        <option value="赤">赤</option>
+        <option value="白">白</option>
+        <option value="スパークリング">スパークリング</option>
+        <option value="ロゼ">ロゼ</option>
+        <option value="オレンジ">オレンジ</option>
+    </select>
+
+    <!-- ワインのボディを選択するドロップダウン -->
+    <select id="wine_body">
+        <option value="">-選択してください-</option>
+        <option value="&body=フル">フル</option>
+        <option value="&body=ミディアム＋">ミディアム＋</option>
+        <option value="&body=ミディアム">ミディアム</option>
+        <option value="&body=ミディアムー">ミディアムー</option>
+        <option value="&body=ライト">ライト</option>
+    </select>
+
+    <button id="button" onclick="searchWine()">検索</button>
+    
+    <!-- データを表示するテーブル -->
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名前</th>
+                <th>種類</th>
+                <th>ボディ</th>
+                <th>味わい</th>
+                <th>生産国</th>
+                <th>詳細</th>
+                <th>使用ぶどう品種</th>
+                <th>おすすめ料理</th>
+                <th>価格</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- データはここに表示されます -->
+        </tbody>
+    </table>
+
+    <!-- データを表示する要素 -->
+    <pre id="json-data"></pre>
+
+    <script>
+        function searchWine(){
+            var s_wine_category = document.getElementById("wine_category").value;
+            var s_wine_body = document.getElementById("wine_body").value;
+            var apiUrl = "https://sheetdb.io/api/v1/zbcbt2gc3augz/search?category=" + s_wine_category + s_wine_body;
+            var apiUrl2 = "https://sheetdb.io/api/v1/vwdzcz4xnbdsg/search?category=" + s_wine_category + s_wine_body;
+
+            // JSONデータを表示する要素
+            var jsonDataElement = document.getElementById("json-data");
+
+            // テーブルのtbody要素
+            var tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";
+
+            // 1枚目のスプレッドシートからデータを取得
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // 2枚目のスプレッドシートからデータを取得
+                    fetch(apiUrl2)
+                        .then(response2 => response2.json())
+                        .then(data2 => {
+                            // 1枚目と2枚目のデータをマージ
+                            var mergedData = data.map(item => {
+                                var matchingItem = data2.find(i => i.id === item.id);
+                                var suggestDish = matchingItem ? matchingItem.Suggest : "情報なし";
+
+                         // 改行を<br>タグに変換
+                        suggestDish = suggestDish.replace(/\n/g, '<br>');
+                        item.grapevarieties = item.grapevarieties.replace(/\n/g, '<br>');
+
+                                // テーブルにデータを追加
+                                var row = document.createElement("tr");
+                                row.innerHTML = `
+                                    <td>${item.id}</td>
+                                    <td><a href="${item.URL}" target="_blank">${item.name}</a></td>
+                                    <td>${item.category}</td>
+                                    <td>${item.body}</td>
+                                    <td>${item.taste}</td>
+                                    <td>${item.Producingcountry}</td>
+                                    <td>${item.detail}</td>
+                                    <td>${item.grapevarieties}</td>
+                                    <td>${suggestDish}</td>
+                                    <td>${item.price}</td>
+                                `;
+                                tableBody.appendChild(row);
+
+                                return {
+                                    ID: item.id,
+                                    名前: item.name,
+                                    種類: item.category,
+                                    ボディ: item.body,
+                                    味わい: item.taste,
+                                    生産国: item.Producingcountry,
+                                    詳細: item.detail,
+                                    使用ぶどう品種: item.grapevarieties,
+                                    おすすめ料理: suggestDish,
+                                    価格: item.price
+                                };
+                            });
+                        })
+                        .catch(error => {
+                            console.error("2枚目のデータの取得に失敗しました:", error);
+                        });
+                })
+                .catch(error => {
+                    console.error("1枚目のデータの取得に失敗しました:", error);
+                });
+        }
+    </script>
+</body>
+<style>
+    body {
+        font-family: 'Helvetica', 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+    nav {
+        background-color: #333;
+        padding: 10px;
+        text-align: center;
+    }
+    nav {
+            background-color: #444; /* ナビゲーションの背景色 */
+            padding: 10px; /* パディング */
+            text-align: center; /* 中央揃え */
+        }
+
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+        color: #8B0000;
+    }
+
+    select, button {
+        font-size: 16px;
+        padding: 10px;
+        margin: 10px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        display: block;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #333;
+        padding: 15px;
+        text-align: left;
+        writing-mode: horizontal-tb; /* Horizontal writing mode */
+    }
+
+    th {
+        background-color: #666;
+        color: #fff;
+    }
+
+    #json-data {
+        background-color: #fff;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    /* Media Query for Mobile Devices */
+    @media screen and (max-width: 768px) {
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        select, button {
+            display: inline-block;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        th, td {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+
+
+    </style>
+</html>
+
