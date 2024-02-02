@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ワイン検索サイト</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">検索</a></li>
+            <li><a href="document.html">ドキュメント</a></li>
+        </ul>
+    </nav>
+
+    <!-- APIドキュメントセクション -->
+    <section id="api-documentation">
+        <h2>API Documentation</h2>
+        <p>
+            このAPIを使用すると、以下のデータを取得できます。<br>
+            ・ワインのカテゴリー<br>
+            ・味わい<br>
+            ・生産国<br>
+            ・使用しているぶどう品種<br>
+            ・該当ワインに合う料理<br>
+            ・平均的な価格<br>
+        </p>
+
+        <h3>エンドポイント</h3>
+        <p>URL: <code>https://sheetdb.io/api/v1/zbcbt2gc3augz</code></p>
+
+        <h3>調べ方</h3>
+        <p>ID、ワインの種類、味わいからワインを検索します。</p>
+        <p>Method: <code>GET</code></p>
+        <p>例：フルボディの赤ワインの検索:<code>https://sheetdb.io/api/v1/zbcbt2gc3augz/search?category=赤&body=フル</code></p>
+
+        <h3>パラメーター</h3>
+        <ul>
+            <li><code>id</code>: id (1~)</li><br>
+            <li><code>category</code>: 赤, 白, スパークリング, ロゼ, オレンジ</li><br>
+            <li><code>body</code>: フル, ミディアム＋, ミディアム, ミディアムー, ライト</li><br>
+            <li><code>taste</code>: 辛口, やや辛口, やや甘口, 甘口</li>
+        </ul>
+
+    </section>
+
+<style>
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444; /* ナビゲーションの背景色 */
+            padding: 10px; /* パディング */
+            text-align: center; /* 中央揃え */
+        }
+
+        nav ul {
+            list-style: none; /* リストのマーカーをなくす */
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block; /* 横並びにする */
+            margin-right: 20px; /* 各リンクの右マージン */
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff; /* ナビゲーションのテキスト色 */
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease; /* 色の変化をスムーズに */
+        }
+
+        nav a:hover {
+            color: #8B0000; /* ホバー時のテキスト色を深い赤に変更 */
+        }
+        li {
+            list-style: none;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        #api-documentation {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #api-documentation h2 {
+            color: #333;
+        }
+
+        #api-documentation h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #api-documentation p {
+            color: #555;
+        }
+
+        #api-documentation code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        #api-documentation ul {
+            margin-top: 10px;
+        }
+
+        #api-documentation li {
+            color: #555;
+        }
+
+        #api-documentation example {
+            display: block;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        #api-documentation example code {
+            background-color: #f8f8f8;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+
+</style>
